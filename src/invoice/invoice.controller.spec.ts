@@ -3,18 +3,19 @@ import { InvoiceController } from "./invoice.controller";
 import { InvoiceService } from "./invoice.service";
 import { Invoice } from "./schemas/invoice.schema";
 import { InvoicePaginationDto } from "./dto/invoice-pagination.dto";
+import { MongoIdDTO } from "./dto/MongoId-dto";
 
 describe("InvoiceController", () => {
   let controller: InvoiceController;
   let invoice = <Invoice>{},
     invoices = <Invoice[]>[],
     query = <InvoicePaginationDto>{},
-    id = "67766c45d5d62739fef7f3c4";
+    id: MongoIdDTO = { id: "67766c45d5d62739fef7f3c4" };
   const invoiceServicesMock = {
     create: jest.fn((dto) => invoice),
     findOne: jest.fn((dto) => invoice),
     update: jest.fn().mockImplementation((id, dto) => {
-      return { id, ...dto };
+      return invoice;
     }),
     findAll: jest.fn((dto) => {
       return invoices;
@@ -44,6 +45,13 @@ describe("InvoiceController", () => {
     );
   });
 
+  it("should update invoice", async () => {
+    expect(await controller.updateInvoice(invoice, id)).toEqual(
+      // id: expect.any(Number),
+      invoice
+    );
+  });
+
   it("shoud be return an invoice", async () => {
     expect(await controller.findOne(id)).toEqual(invoice);
   });
@@ -53,6 +61,6 @@ describe("InvoiceController", () => {
   });
 
   it("shoud be delete an invoice", async () => {
-    expect(await controller.delete(id)).toEqual(invoice);
+    expect(await controller.delete(id.id)).toEqual(invoice);
   });
 });

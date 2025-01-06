@@ -4,9 +4,12 @@ import {
   IsArray,
   IsOptional,
   IsMongoId,
+  isString,
+  IsString,
 } from "class-validator";
 
 export class MongoIdDTO {
   @IsMongoId()
-  id: number;
+  @IsString()
+  id: string;
 }

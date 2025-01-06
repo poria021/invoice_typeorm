@@ -14,6 +14,7 @@ import { Invoice, InvoiceDocument } from "./schemas/invoice.schema";
 import { InvoicePaginationDto } from "./dto/invoice-pagination.dto";
 import { log } from "console";
 import { MongoIdDTO } from "./dto/MongoId-dto";
+import { InvoiceUpdateDto } from "./dto/invoice.schema.Dto";
 @Injectable()
 export class InvoiceService {
   constructor(
@@ -27,8 +28,8 @@ export class InvoiceService {
   private logger = new Logger(InvoiceService.name);
 
   async create(invoice: Invoice): Promise<Invoice> {
-    invoice.date = new Date();
-    return this.invoiceModel.create(invoice);
+    // invoice.date = new Date();
+    // return this.invoiceModel.create(invoice);
 
     //or
     const createdInvoice = new this.invoiceModel({
@@ -39,10 +40,10 @@ export class InvoiceService {
     return createdInvoice.save();
   }
 
-  async update(id: number, data: Partial<Invoice>) {
-    let isValid = mongoose.isValidObjectId(id);
-    if (!isValid) throw new BadRequestException("id not found");
-    return this.invoiceModel.findByIdAndUpdate(id, data);
+  async update(id: MongoIdDTO, data: InvoiceUpdateDto) {
+    // let isValid = mongoose.isValidObjectId(id);
+    // if (!isValid) throw new BadRequestException("id not found");
+    return this.invoiceModel.findByIdAndUpdate(id.id, data);
   }
 
   async findAll(filters: InvoicePaginationDto) {
@@ -66,10 +67,10 @@ export class InvoiceService {
     });
   }
 
-  async findOne(id: number): Promise<Invoice> {
+  async findOne(id: MongoIdDTO): Promise<Invoice> {
     // let isValid = mongoose.isValidObjectId(id);
     // if (!isValid) throw new BadRequestException("id not found");
-    return this.invoiceModel.findById(id).exec();
+    return this.invoiceModel.findById(id.id).exec();
   }
 
   async delete(id: string): Promise<Invoice> {

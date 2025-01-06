@@ -25,19 +25,18 @@ import { log } from "console";
 @Controller("invoice")
 export class InvoiceController {
   constructor(
-    private readonly invoiceService: InvoiceService,
-    private typeorm_Service: UserService
+    private readonly invoiceService: InvoiceService // private typeorm_Service: UserService
   ) {}
 
-  @Get("all")
-  async findAllt(): Promise<User[] | Invoice[]> {
-    return this.typeorm_Service.findAll();
-  }
+  // @Get("all")
+  // async findAllt(): Promise<User[] | Invoice[]> {
+  //   return this.typeorm_Service.findAll();
+  // }
 
-  @Post("all")
-  async create2(@Body() user: Partial<User>): Promise<User | Invoice2> {
-    return this.typeorm_Service.create(user);
-  }
+  // @Post("all")
+  // async create2(@Body() user: Partial<User>): Promise<User | Invoice2> {
+  //   return this.typeorm_Service.create(user);
+  // }
 
   @Post()
   async create(@Body() createInvoiceDto: Invoice) {
@@ -52,7 +51,7 @@ export class InvoiceController {
     @Body() data: InvoiceUpdateDto,
     @Param() mongoid: MongoIdDTO
   ) {
-    return this.invoiceService.update(mongoid.id, data);
+    return this.invoiceService.update(mongoid, data);
   }
 
   @Get()
@@ -62,8 +61,7 @@ export class InvoiceController {
 
   @Get(":id")
   async findOne(@Param() mongoid: MongoIdDTO) {
-    log(mongoid);
-    return this.invoiceService.findOne(mongoid.id);
+    return this.invoiceService.findOne(mongoid);
   }
 
   @Delete(":id")
